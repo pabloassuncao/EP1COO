@@ -6,6 +6,7 @@ import java.util.List;
  * Classe que contém informações das cartas
  */
 public class Card {
+    protected static final int BOARD_SIZE = 5;
     private final String name;
     private final Color color;
     private final Position[] positions;
@@ -20,6 +21,15 @@ public class Card {
         this.name = name;
         this.color = color;
         this.positions = positions;
+    }
+
+    /**
+     * Método que devolve o movimento do index passado como parâmetro
+     * @param index Index do movimento
+     * @return String que contém o nome da carta
+     */
+    public Position getMove(int index) {
+        return new Position(this.positions[index].getRow()+BOARD_SIZE/2, this.positions[index].getCol()+BOARD_SIZE/2);
     }
 
     /**
@@ -48,6 +58,20 @@ public class Card {
     }
 
     /**
+     * Método que verifica se é possível mover a peça para a posição passada como parâmetro
+     * @param piecePosition Posição atual da peça
+     * @param position Posição para onde a peça será movida
+     * @return
+     */
+    public boolean isReachable(Position piecePosition, Position position) {
+        for (Position p : this.positions) {
+            if (p.getRow() == position.getRow() - piecePosition.getRow() && p.getCol() == position.getCol() - piecePosition.getCol())
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Método que cria todas as cartas do jogo, embaralha-as e devolve as 5 que serão utilizadas na partida.
      * @return Vetor de cartas com todas as cartas do jogo
      */
@@ -72,4 +96,33 @@ public class Card {
         }
         
         return playDeck;
-    }}
+    }
+    
+    /**
+     * Método para printar uma carta e seus possíveis movimentos
+     */
+    public void printCard(int i) {
+        System.out.println("A carta" + i + " é " + this.name + " e possui as seguintes posições de movimento:");
+
+        List <Position> positions = new ArrayList<Position>();
+        for (Position position : this.positions) {
+            positions.add(position);
+        }
+
+        Position temp;
+
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            for(int k = 0; k < BOARD_SIZE; k++) {
+                temp = new Position(j-BOARD_SIZE/2, k-BOARD_SIZE/2);
+                if (positions.contains(temp)) {
+                    for( int z = 0; z < this.positions.length; z++) {
+                        System.out.println("[0"+ z +"]");
+                    }
+                } else {
+                    System.out.print("[  ]");
+                }
+            }
+            System.out.println();
+        }
+    }
+}

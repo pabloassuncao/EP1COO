@@ -49,18 +49,17 @@ public class Spot {
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size; j++) {
                 if(i == 0){
-                    if(j == size/2)
+                    if(j == size/2) 
                         board[i][j] = new Spot(new Piece(Color.BLUE, true), new Position(i, j), Color.BLUE);
-                    else
+                    else 
                         board[i][j] = new Spot(new Piece(Color.BLUE, false), new Position(i, j), Color.BLUE);
                 }
                 if(i == size-1){
-                    if(j == size/2) 
+                    if(j == size/2)
                         board[i][j] = new Spot(new Piece(Color.RED, true), new Position(i, j), Color.RED);
                     else
                         board[i][j] = new Spot(new Piece(Color.RED, false), new Position(i, j), Color.RED);
-                } 
-                else board[i][j] = new Spot(new Position(i, j));
+                } else board[i][j] = new Spot(new Position(i, j));
             }
         }
         return board;
@@ -80,6 +79,15 @@ public class Spot {
      */
     public Piece getPiece() {
         return this.piece;
+    }
+    
+    public void setPiece(Piece piece) {
+        this.occupySpot(piece);
+        this.piece = piece;
+    }
+
+    public void removePiece() {
+        releaseSpot();
     }
 
     /**
@@ -105,7 +113,17 @@ public class Spot {
      * @exception IllegalMovementException Caso o espaço já esteja ocupado por uma peça da mesma cor
      */
     protected void occupySpot(Piece piece) throws IllegalMovementException {
-        //TODO: Implementar
+        if(this.piece != null && this.piece.getColor() == piece.getColor()) {
+            throw new IllegalMovementException("This spot is already occupied by a piece of the same color");
+        }
+
+        System.out.println("Piece of color " + piece.getColor() + " moved to [" + this.position.getCol() + ", " + this.position.getRow() + "]");
+        if(this.piece != null) {
+            System.out.println("Piece of color " + this.piece.getColor() + " dies from cringe");
+            this.piece.kill();
+        }
+
+        this.piece = piece;
     }
 
     /**

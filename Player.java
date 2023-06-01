@@ -74,6 +74,19 @@ public class Player {
         if (!oldCardInHand || newCardInHand) 
             throw new InvalidCardException("A carta não está na mão do jogador ou a carta já está na mão do jogador");
 
-        // TODO: Terminar validação se a carta está na mesa e se faz parte das cartas do jogo
+        Card temp = oldCard;
+        oldCard = newCard;
+        newCard = temp;
+    }
+
+
+    /**
+     * Método para imprimir as cartas da mão do jogador
+     * @return void - não retorna nada
+     */
+    public void printHand() {
+        for(int i = 0; i < this.cards.length; i++){
+            this.cards[i].printCard(i + 1);
+        }
     }
 }

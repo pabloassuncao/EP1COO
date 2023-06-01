@@ -40,4 +40,16 @@ public class Piece {
     public boolean isAlive() {
         return this.isAlive;
     }
+
+    /**
+     * Método que mata a peça
+     * @return Booleano true para caso a peça tenha sido morta e false caso contrário
+     */
+    public boolean kill() {
+        if (this.isAlive) {
+            this.isAlive = false;
+            return true;
+        }
+        return false;
+    }
 }
