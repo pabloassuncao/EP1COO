@@ -58,14 +58,13 @@ public class Card {
     }
 
     /**
-     * Método que verifica se é possível mover a peça para a posição passada como parâmetro
-     * @param piecePosition Posição atual da peça
-     * @param position Posição para onde a peça será movida
+     * Método que verifica se existe determinada posição de movimento em relação ao ponto de origem
+     * @param cardMove Posição realtiva de movimento para validação
      * @return
      */
-    public boolean isReachable(Position piecePosition, Position position) {
+    public boolean hasMove(Position cardMove) {
         for (Position p : this.positions) {
-            if (p.getRow() == position.getRow() - piecePosition.getRow() && p.getCol() == position.getCol() - piecePosition.getCol())
+            if (p.getRow() == cardMove.getRow() && p.getCol() == cardMove.getCol())
                 return true;
         }
         return false;

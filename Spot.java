@@ -80,31 +80,40 @@ public class Spot {
     public Piece getPiece() {
         return this.piece;
     }
-    
+
+    /**
+     * Método que define a peça contida neste espaço
+     * @param piece A peça para ocupar este espaço
+     */
     public void setPiece(Piece piece) {
         this.occupySpot(piece);
         this.piece = piece;
     }
 
+    /**
+     * Método que remove a peça contida neste espaço
+     */
     public void removePiece() {
         releaseSpot();
+    }
+
+    /**
+     * Método que define a peça contida neste espaço
+     * @param newPiece A peça para ocupar este espaço
+     * @return Objeto Piece caso tenha uma peça ou null caso o espaço esteja vazio
+     */
+    public Piece movePiece(Piece newPiece) {       
+        Piece oldPiece = this.piece;
+        occupySpot(newPiece);
+        return oldPiece;
     }
 
     /**
      * Método que devolve a cor do espaço
      * @return Enum Color com a cor do espaço. Caso o espaço não tenha cor, o valor do enum será NONE
      */
-    Color getColor() {
+    public Color getColor() {
         return this.color;
-    }
-
-    /**
-     * Método que verifica se a posição é válida no tabuleiro
-     * @return Um booleano que indica se o objeto representa uma posição válida no tabuleiro
-     */
-    public boolean isValid() {
-        return false;
-        //TODO: Implementar, incompreensível
     }
 
     /**

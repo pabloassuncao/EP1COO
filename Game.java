@@ -36,15 +36,15 @@ public interface Game {
 
     /**
      * Método que move uma peça
-     * @param piece A peça que irá mover
      * @param card A carta de movimento que será usada
-     * @param position A posição da carta para onde a peça irá se mover
+     * @param cardMove O movimento que será feito pela peça
+     * @param currentPos A posição atual da peça q será movida
      * @exception IncorrectTurnOrderException Caso não seja a vez de um jogador fazer um movimento
      * @exception IllegalMovementException Caso uma peça seja movida para fora do tabuleiro ou para uma posição onde já tem uma peça da mesma cor
      * @exception InvalidCardException Caso uma carta que não está na mão do jogador seja usada
      * @exception InvalidPieceException Caso uma peça que não está no tabuleiro seja usada
      */
-    void makeMove(Piece piece, Card card, Position position) throws IncorrectTurnOrderException, IllegalMovementException, InvalidCardException, InvalidPieceException;
+    void makeMove(Card card, Position cardMove, Position currentPos) throws IncorrectTurnOrderException, IllegalMovementException, InvalidCardException, InvalidPieceException;
 
     /**
      * Método que confere se um jogador de uma determinada cor venceu o jogo. Critérios de vitória:

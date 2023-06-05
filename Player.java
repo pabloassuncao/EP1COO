@@ -79,7 +79,6 @@ public class Player {
         newCard = temp;
     }
 
-
     /**
      * Método para imprimir as cartas da mão do jogador
      * @return void - não retorna nada
