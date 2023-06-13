@@ -71,6 +71,48 @@ public class GameImpl implements Game{
     }
 
     /**
+     * Método para jogar o jogo
+     */
+    public void play(){
+        while(this.winner == null){
+            this.playTurn();
+        }
+        System.out.println("O vencedor é o jogador " + this.winner.getName());
+    }
+
+    /**
+     * Método que executa um turno de jogo
+     */
+    public void playTurn(){
+        Scanner scanner = new Scanner(System.in);
+        Player opponent = this.turn == this.redPlayer ? this.bluePlayer : this.redPlayer;
+
+        System.out.println("É a vez do jogador " + this.turn.getName());
+        
+        System.out.println("A mãe do jogador " + this.turn.getName() + " é:");
+        this.turn.printHand();
+
+        System.out.println("A carta na mesa é:");
+        // TODO: print table card
+        //this.tableCard.printCard();
+
+        System.out.println("O tabuleiro é:");
+        this.printBoard();
+
+        System.out.println("As cartas do seu oponente são:");
+        opponent.printHand();
+
+        System.out.println("Escolha uma carta para jogar:");
+        int cardIndex = scanner.nextInt();
+
+        System.out.println("Escolha uma peça para mover no formato 'linha coluna':");
+        int pieceRow = scanner.nextInt();
+        int pieceCol = scanner.nextInt();
+        
+
+    }
+
+    /**
      * Método que devolve a cor da posição do tabuleiro. Se possui uma cor, significa que é um templo. Caso contrário, é um espaço normal
      * @param position Posição do tabuleiro
      * @return O enum Color que representa a cor da posição
@@ -170,6 +212,9 @@ public class GameImpl implements Game{
         if(!card.hasMove(cardMove))
             throw new IllegalMovementException("Movimento não permitido pela carta.");
 
+        if(endRow < 0 || endRow  >= BOARD_SIZE || endCol < 0 || endCol >= BOARD_SIZE)
+            throw new IllegalMovementException("Movimento ilegal, posição final fora do tabuleiro");
+
         // Verifica se a carta usada está na mão do jogador
         boolean cardInHand = false;
 
@@ -208,11 +253,11 @@ public class GameImpl implements Game{
                 if(spot.getPiece() == null){
                     System.out.print("[  ]");
                 }
-                else if(spot.getPiece() != null && spot.getPiece().isMaster() == false){
+                else if(spot.getPiece().isMaster() == false){
                     if(spot.getPiece().getColor() == Color.BLUE) System.out.print("[BS]");
                     else System.out.print("[RS]");
                 }
-                else if(spot.getPiece() != null && spot.getPiece().isMaster() == true){
+                else if(spot.getPiece().isMaster() == true){
                     if(spot.getPiece().getColor() == Color.BLUE) System.out.print("[BM]");
                     else System.out.print("[RM]");
                 }
