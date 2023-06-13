@@ -75,8 +75,6 @@ public class Card {
      * @return Vetor de cartas com todas as cartas do jogo
      */
     public static Card[] createCards() {
-        Card[] playDeck = new Card[5];
-
         List<Card> allDeck = new ArrayList<Card>();
 
         allDeck.add(new Card("Tiger", Color.BLUE, new Position[]{new Position(1, 0), new Position(-2, 0)}));
@@ -90,9 +88,7 @@ public class Card {
 
 		Collections.shuffle(allDeck);
 
-        for (int i = 0; i < 5; i++) {
-            playDeck[i] = allDeck.get(i);allDeck.get(i);
-        }
+        Card[] playDeck = allDeck.subList(0, 5).toArray(new Card[5]);
         
         return playDeck;
     }
