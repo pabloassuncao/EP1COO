@@ -85,7 +85,8 @@ public class Player {
      */
     public void printHand() {
         for(int i = 0; i < this.cards.length; i++){
-            this.cards[i].printCard(i + 1);
+            System.out.println("A carta " + (i+1) + " é " + this.cards[i].getName() + " e possui as seguintes posições de movimento:");
+            this.cards[i].printCard();
         }
     }
 }

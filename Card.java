@@ -9,7 +9,7 @@ public class Card {
     protected static final int BOARD_SIZE = 5;
     private final String name;
     private final Color color;
-    private final Position[] positions;
+    private Position[] positions;
 
     /**
      * Construtor que define os principais atributos de uma cara
@@ -21,6 +21,34 @@ public class Card {
         this.name = name;
         this.color = color;
         this.positions = positions;
+    }
+
+    private void sortMoves() {
+        List<Position> moves = new ArrayList<Position>();
+
+        List<Position> posList = new ArrayList<Position>();
+
+        for (Position pos : this.positions) {
+            posList.add(pos);
+        }
+
+        int moveCount = 0;
+        Position temp;
+
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            for(int k = 0; k < BOARD_SIZE; k++) {
+                temp = new Position(j-BOARD_SIZE/2, k-BOARD_SIZE/2);
+                if (posList.contains(temp)) {
+                    moves.add(temp);
+                    moveCount++;
+                }
+            }
+        }
+
+        if (moveCount != positions.length)
+            throw new RuntimeException("Erro ao criar cartas: número de movimentos inválido");
+
+        this.positions = moves.toArray(new Position[moves.size()]);
     }
 
     /**
@@ -96,28 +124,32 @@ public class Card {
     /**
      * Método para printar uma carta e seus possíveis movimentos
      */
-    public void printCard(int i) {
-        System.out.println("A carta" + i + " é " + this.name + " e possui as seguintes posições de movimento:");
-
-        List <Position> positions = new ArrayList<Position>();
-        for (Position position : this.positions) {
-            positions.add(position);
+    public void printCard() {
+        // TODO: Arrumar Print da carta
+        List <Position> posList = new ArrayList<Position>();
+        for (Position posArray : this.positions) {
+            posList.add(posArray);
         }
 
         Position temp;
 
+        int moveIndex = 1;
+        int center = BOARD_SIZE/2;
+
         for(int j = 0; j < BOARD_SIZE; j++) {
             for(int k = 0; k < BOARD_SIZE; k++) {
-                temp = new Position(j-BOARD_SIZE/2, k-BOARD_SIZE/2);
-                if (positions.contains(temp)) {
-                    for( int z = 0; z < this.positions.length; z++) {
-                        System.out.println("[0"+ z +"]");
-                    }
+                temp = new Position(j-center, k-center);
+                if (posList.contains(temp)) {
+                    System.out.print("[0"+ moveIndex +"]");
+                    moveIndex++;
+                } else if(k == center && j == center) {
+                    System.out.print("[XX]");
                 } else {
                     System.out.print("[  ]");
                 }
             }
             System.out.println();
         }
+        System.out.println();
     }
 }

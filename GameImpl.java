@@ -89,12 +89,13 @@ public class GameImpl implements Game{
 
         System.out.println("É a vez do jogador " + this.turn.getName());
         
-        System.out.println("A mãe do jogador " + this.turn.getName() + " é:");
+        System.out.println("A mão do jogador " + this.turn.getName() + " é:");
         this.turn.printHand();
 
         System.out.println("A carta na mesa é:");
-        // TODO: print table card
-        //this.tableCard.printCard();
+
+        System.out.println("A carta da mesa é " + tableCard.getName() + " e possui as seguintes posições de movimento:");
+        this.tableCard.printCard();
 
         System.out.println("O tabuleiro é:");
         this.printBoard();
@@ -102,14 +103,50 @@ public class GameImpl implements Game{
         System.out.println("As cartas do seu oponente são:");
         opponent.printHand();
 
-        System.out.println("Escolha uma carta para jogar:");
-        int cardIndex = scanner.nextInt();
-
         System.out.println("Escolha uma peça para mover no formato 'linha coluna':");
         int pieceRow = scanner.nextInt();
         int pieceCol = scanner.nextInt();
-        
 
+        System.out.println("Escolha uma carta pelo número (1 ou 2) para jogar:");
+        int cardIndex = scanner.nextInt() - 1;
+
+        System.out.println("Escolha uma dos movimentos da carta digitando seu número:");
+        int cardMoveIndex = scanner.nextInt() - 1;
+
+        Card card = this.turn.getCards()[cardIndex];
+
+        Position cardMove = card.getPositions()[cardMoveIndex];
+
+        Position currentPos = new Position(pieceRow, pieceCol);
+
+        try{
+            this.makeMove(card, cardMove, currentPos);
+        } catch (IncorrectTurnOrderException e){
+            System.out.println(e.getMessage());
+            return;
+        } catch (IllegalMovementException e){
+            System.out.println(e.getMessage());
+            return;
+        } catch (InvalidCardException e){
+            System.out.println(e.getMessage());
+            return;
+        } catch (InvalidPieceException e){
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        this.turn.swapCard(card, this.tableCard);
+
+        this.tableCard = card;
+
+        if(checkVictory(this.turn.getPieceColor())){
+            winner = this.turn;
+            return;
+        }
+
+        this.turn = opponent;
+
+        return;
     }
 
     /**
@@ -247,6 +284,7 @@ public class GameImpl implements Game{
      * OBS: Esse método é opcional não será utilizado na correção, mas serve para acompanhar os resultados parciais do jogo
      */
     public void printBoard(){
+        //TODO: Arrumar printBoard
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
                 Spot spot = board[i][j];
@@ -254,17 +292,38 @@ public class GameImpl implements Game{
                     System.out.print("[  ]");
                 }
                 else if(spot.getPiece().isMaster() == false){
-                    if(spot.getPiece().getColor() == Color.BLUE) System.out.print("[BS]");
-                    else System.out.print("[RS]");
+                    if(spot.getColor() == Color.BLUE) {
+                        System.out.print("[BS]");
+                    } else System.out.print("[RS]");
                 }
                 else if(spot.getPiece().isMaster() == true){
-                    if(spot.getPiece().getColor() == Color.BLUE) System.out.print("[BM]");
-                    else System.out.print("[RM]");
+                    if(spot.getColor() == Color.BLUE) {
+                        System.out.print("[BM]");
+                    } else System.out.print("[RM]");
                 }
-                System.out.println();
             }
+            System.out.println();
         }
 
         return;
     };
+
+    /**
+     * Método que imprime o estado atual do jogo
+     */
+    public void printGame(){
+        System.out.println("O tabuleiro é:");
+        this.printBoard();
+
+        System.out.println("A carta na mesa é:");
+        this.tableCard.printCard();
+
+        System.out.println("A mão do jogador " + this.redPlayer.getName() + " é:");
+        this.redPlayer.printHand();
+
+        System.out.println("A mão do jogador " + this.bluePlayer.getName() + " é:");
+        this.bluePlayer.printHand();
+
+        return;
+    }
 }
