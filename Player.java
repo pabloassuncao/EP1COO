@@ -67,16 +67,19 @@ public class Player {
         boolean newCardInHand = false;
         
         for (Card card : this.cards) {
-            if (card == oldCard) oldCardInHand = true;
-            if (card == newCard) newCardInHand = true;
+            if (card.equals(oldCard)) oldCardInHand = true;
+            if (card.equals(newCard)) newCardInHand = true;
         }
 
         if (!oldCardInHand || newCardInHand) 
             throw new InvalidCardException("A carta não está na mão do jogador ou a carta já está na mão do jogador");
 
-        Card temp = oldCard;
-        oldCard = newCard;
-        newCard = temp;
+        for(int i = 0; i < this.cards.length; i++){
+            if(this.cards[i].equals(oldCard)){
+                this.cards[i] = newCard;
+                break;
+            }
+        }
     }
 
     /**

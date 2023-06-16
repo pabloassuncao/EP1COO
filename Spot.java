@@ -46,20 +46,23 @@ public class Spot {
      */
     public static Spot[][] createBoard(int size){
         Spot[][] board = new Spot[size][size];
+
+        int center = size/2;
+        
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size; j++) {
                 if(i == 0){
-                    if(j == size/2) 
+                    if(j == center) 
                         board[i][j] = new Spot(new Piece(Color.BLUE, true), new Position(i, j), Color.BLUE);
                     else 
-                        board[i][j] = new Spot(new Piece(Color.BLUE, false), new Position(i, j), Color.BLUE);
-                }
-                if(i == size-1){
-                    if(j == size/2)
+                       board[i][j] = new Spot(new Piece(Color.BLUE, false), new Position(i, j));
+                } else if(i == size-1){
+                    if(j == center) 
                         board[i][j] = new Spot(new Piece(Color.RED, true), new Position(i, j), Color.RED);
-                    else
-                        board[i][j] = new Spot(new Piece(Color.RED, false), new Position(i, j), Color.RED);
-                } else board[i][j] = new Spot(new Position(i, j));
+                    else 
+                        board[i][j] = new Spot(new Piece(Color.RED, false), new Position(i, j));                
+                } else 
+                    board[i][j] = new Spot(new Position(i, j));
             }
         }
         return board;
@@ -126,7 +129,7 @@ public class Spot {
             throw new IllegalMovementException("This spot is already occupied by a piece of the same color");
         }
 
-        System.out.println("Piece of color " + piece.getColor() + " moved to [" + this.position.getCol() + ", " + this.position.getRow() + "]");
+        System.out.println("Piece of color " + piece.getColor() + " moved to [" + this.position.getRow() + ", " + this.position.getCol() + "]");
         if(this.piece != null) {
             System.out.println("Piece of color " + this.piece.getColor() + " dies from cringe");
             this.piece.kill();

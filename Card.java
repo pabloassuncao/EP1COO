@@ -21,6 +21,7 @@ public class Card {
         this.name = name;
         this.color = color;
         this.positions = positions;
+        this.sortMoves();
     }
 
     private void sortMoves() {
@@ -34,11 +35,31 @@ public class Card {
 
         int moveCount = 0;
         Position temp;
+        int center = BOARD_SIZE / 2;
 
-        for(int j = 0; j < BOARD_SIZE; j++) {
-            for(int k = 0; k < BOARD_SIZE; k++) {
-                temp = new Position(j-BOARD_SIZE/2, k-BOARD_SIZE/2);
-                if (posList.contains(temp)) {
+        // for(int j = 0; j < BOARD_SIZE; j++) {
+        //     for(int k = 0; k < BOARD_SIZE; k++) {
+        //         temp = new Position(j-BOARD_SIZE/2, k-BOARD_SIZE/2);
+        //         if (posList.contains(temp)) {
+        //             moves.add(temp);
+        //             moveCount++;
+        //         }
+        //     }
+        // }
+
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            for (int k = 0; k < BOARD_SIZE; k++) {
+                temp = new Position(j - center, k - center);
+                boolean isMove = false;
+
+                for (Position pos : positions) {
+                    if (pos.getRow() == temp.getRow() && pos.getCol() == temp.getCol()) {
+                        isMove = true;
+                        break;
+                    }
+                }
+
+                if (isMove) {
                     moves.add(temp);
                     moveCount++;
                 }
@@ -125,7 +146,7 @@ public class Card {
      * Método para printar uma carta e seus possíveis movimentos
      */
     public void printCard() {
-        // TODO: Arrumar Print da carta
+        // TODO: Melhorar o fix
         List <Position> posList = new ArrayList<Position>();
         for (Position posArray : this.positions) {
             posList.add(posArray);
@@ -136,13 +157,38 @@ public class Card {
         int moveIndex = 1;
         int center = BOARD_SIZE/2;
 
-        for(int j = 0; j < BOARD_SIZE; j++) {
-            for(int k = 0; k < BOARD_SIZE; k++) {
-                temp = new Position(j-center, k-center);
-                if (posList.contains(temp)) {
-                    System.out.print("[0"+ moveIndex +"]");
+        // for(int j = 0; j < BOARD_SIZE; j++) {
+        //     for(int k = 0; k < BOARD_SIZE; k++) {
+        //         temp = new Position(j-center, k-center);
+        //         if (posList.contains(temp)) {
+        //             System.out.print("[0"+ moveIndex +"]");
+        //             moveIndex++;
+        //         } else if(k == center && j == center) {
+        //             System.out.print("[XX]");
+        //         } else {
+        //             System.out.print("[  ]");
+        //         }
+        //     }
+        //     System.out.println();
+        // }
+        // System.out.println();
+
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            for (int k = 0; k < BOARD_SIZE; k++) {
+                temp = new Position(j - center, k - center);
+                boolean isMove = false;
+
+                for (Position pos : positions) {
+                    if (pos.getRow() == temp.getRow() && pos.getCol() == temp.getCol()) {
+                        isMove = true;
+                        break;
+                    }
+                }
+
+                if (isMove) {
+                    System.out.print("[0" + moveIndex + "]");
                     moveIndex++;
-                } else if(k == center && j == center) {
+                } else if (k == center && j == center) {
                     System.out.print("[XX]");
                 } else {
                     System.out.print("[  ]");

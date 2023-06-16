@@ -1,5 +1,8 @@
 import java.util.*;
 
+//TODO: corrigir o checkVictory
+//TODO: Investigar pq só inicia pelo blue
+
 /**
  * Classe que contém métodos que serão chamados para a execução do jogo
  */
@@ -71,6 +74,15 @@ public class GameImpl implements Game{
     }
 
     /**
+     * Limpa a tela do terminal entre os turnos
+     * https://stackoverflow.com/questions/2979383/java-clear-the-console
+     */
+    private static void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
+
+    /**
      * Método para jogar o jogo
      */
     public void play(){
@@ -87,21 +99,23 @@ public class GameImpl implements Game{
         Scanner scanner = new Scanner(System.in);
         Player opponent = this.turn == this.redPlayer ? this.bluePlayer : this.redPlayer;
 
-        System.out.println("É a vez do jogador " + this.turn.getName());
-        
-        System.out.println("A mão do jogador " + this.turn.getName() + " é:");
-        this.turn.printHand();
+        System.out.println("É a vez do jogador " + this.turn.getName() + " de cor " + this.turn.getPieceColor() + " jogar!\n");
 
-        System.out.println("A carta na mesa é:");
+        System.out.println("A mão do jogador " + this.turn.getName() + " é:\n");
+        this.turn.printHand();
+        System.out.println();
 
         System.out.println("A carta da mesa é " + tableCard.getName() + " e possui as seguintes posições de movimento:");
         this.tableCard.printCard();
+        System.out.println();
 
         System.out.println("O tabuleiro é:");
         this.printBoard();
+        System.out.println();
 
         System.out.println("As cartas do seu oponente são:");
         opponent.printHand();
+        System.out.println();
 
         System.out.println("Escolha uma peça para mover no formato 'linha coluna':");
         int pieceRow = scanner.nextInt();
@@ -118,6 +132,10 @@ public class GameImpl implements Game{
         Position cardMove = card.getPositions()[cardMoveIndex];
 
         Position currentPos = new Position(pieceRow, pieceCol);
+
+        System.out.println("Você escolheu mover a peça " + "["+ pieceRow + "," + pieceCol +"]" + " para a posição " + "["+ (cardMove.getRow()+pieceRow) + "," + (cardMove.getCol()+pieceCol) +"]" + " com a carta " + card.getName() + "\n");
+
+        scanner.close();
 
         try{
             this.makeMove(card, cardMove, currentPos);
@@ -145,6 +163,8 @@ public class GameImpl implements Game{
         }
 
         this.turn = opponent;
+        
+        System.out.println("\n\n=================================================================================================================================================\n\n");
 
         return;
     }
@@ -203,8 +223,10 @@ public class GameImpl implements Game{
 
         Piece masterToCheck = color == Color.RED ? blueMasterPiece : redMasterPiece;
 
-        if(masterToCheck.isDead())
+        if(masterToCheck.isDead()){
+            System.out.println("O mestre do jogador " + color + " está morto!");
             return true;
+        }
 
         if(templeToCheck.getPiece() != null 
             && templeToCheck.getPiece().getColor() == color 
@@ -237,13 +259,15 @@ public class GameImpl implements Game{
         int endRow = curRow + cardRow;
         int endCol = curCol + cardCol;
 
-        // Verifica se é a vez do jogador
-        if(curSpot.getColor() != turn.getPieceColor())
-            throw new IncorrectTurnOrderException("Não é a sua vez.");
+        Piece curPiece = curSpot.getPiece();
 
         // Verifica se existe uma peça na posição atual
-        if(curSpot.getPiece() == null)
+        if(curPiece == null)
             throw new InvalidPieceException("A peça não está no tabuleiro.");
+
+        // Verifica se é a vez do jogador
+        if(curPiece.getColor() != turn.getPieceColor())
+            throw new IncorrectTurnOrderException("Não é a sua vez.");
 
 
         if(!card.hasMove(cardMove))
@@ -284,7 +308,6 @@ public class GameImpl implements Game{
      * OBS: Esse método é opcional não será utilizado na correção, mas serve para acompanhar os resultados parciais do jogo
      */
     public void printBoard(){
-        //TODO: Arrumar printBoard
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
                 Spot spot = board[i][j];
@@ -292,18 +315,19 @@ public class GameImpl implements Game{
                     System.out.print("[  ]");
                 }
                 else if(spot.getPiece().isMaster() == false){
-                    if(spot.getColor() == Color.BLUE) {
+                    if(spot.getPiece().getColor() == Color.BLUE) {
                         System.out.print("[BS]");
                     } else System.out.print("[RS]");
                 }
                 else if(spot.getPiece().isMaster() == true){
-                    if(spot.getColor() == Color.BLUE) {
+                    if(spot.getPiece().getColor() == Color.BLUE) {
                         System.out.print("[BM]");
                     } else System.out.print("[RM]");
                 }
             }
             System.out.println();
         }
+        System.out.println();
 
         return;
     };
