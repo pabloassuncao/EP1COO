@@ -124,18 +124,18 @@ public class Spot {
      * @param piece A peça para ocupar este espaço
      * @exception IllegalMovementException Caso o espaço já esteja ocupado por uma peça da mesma cor
      */
-    protected void occupySpot(Piece piece) throws IllegalMovementException {
-        if(this.piece != null && this.piece.getColor() == piece.getColor()) {
+    protected void occupySpot(Piece newPiece) throws IllegalMovementException {
+        if(this.piece != null && this.piece.getColor() == newPiece.getColor()) {
             throw new IllegalMovementException("This spot is already occupied by a piece of the same color");
         }
 
-        System.out.println("Piece of color " + piece.getColor() + " moved to [" + this.position.getRow() + ", " + this.position.getCol() + "]");
+        System.out.println("Piece of color " + newPiece.getColor() + " moved to [" + this.position.getRow() + ", " + this.position.getCol() + "]");
         if(this.piece != null) {
             System.out.println("Piece of color " + this.piece.getColor() + " dies from cringe");
             this.piece.kill();
         }
 
-        this.piece = piece;
+        this.piece = newPiece;
     }
 
     /**

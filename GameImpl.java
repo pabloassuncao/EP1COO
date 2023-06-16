@@ -86,10 +86,17 @@ public class GameImpl implements Game{
      * Método para jogar o jogo
      */
     public void play(){
-        while(this.winner == null){
+        while(true){
+            Player actual = this.turn;
             this.playTurn();
+            System.out.println(actual.getName() + " jogou!");
+
+            System.out.println("Ele venceu o jogo? " + checkVictory(actual.getPieceColor()));
+            if(checkVictory(actual.getPieceColor())){
+                System.out.println("O vencedor é o jogador " + this.winner.getName());
+                break;
+            }
         }
-        System.out.println("O vencedor é o jogador " + this.winner.getName());
     }
 
     /**
@@ -135,8 +142,6 @@ public class GameImpl implements Game{
 
         System.out.println("Você escolheu mover a peça " + "["+ pieceRow + "," + pieceCol +"]" + " para a posição " + "["+ (cardMove.getRow()+pieceRow) + "," + (cardMove.getCol()+pieceCol) +"]" + " com a carta " + card.getName() + "\n");
 
-        scanner.close();
-
         try{
             this.makeMove(card, cardMove, currentPos);
         } catch (IncorrectTurnOrderException e){
@@ -157,10 +162,7 @@ public class GameImpl implements Game{
 
         this.tableCard = card;
 
-        if(checkVictory(this.turn.getPieceColor())){
-            winner = this.turn;
-            return;
-        }
+        System.out.println(checkVictory(this.turn.getPieceColor()));
 
         this.turn = opponent;
         
