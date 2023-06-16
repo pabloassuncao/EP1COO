@@ -77,7 +77,8 @@ public class Card {
      * @param index Index do movimento
      * @return String que contém o nome da carta
      */
-    public Position getMove(int index) {
+    public Position getMove(int baseIndex, Color color) {
+        int index = color == Color.BLUE ? this.positions.length - baseIndex : baseIndex;
         return new Position(this.positions[index].getRow()+BOARD_SIZE/2, this.positions[index].getCol()+BOARD_SIZE/2);
     }
 
@@ -145,11 +146,12 @@ public class Card {
     /**
      * Método para printar uma carta e seus possíveis movimentos
      */
-    public void printCard() {
+    public void printCard(Color color) {
+        int posConstMulti = color == Color.BLUE ? -1 : 1;
         // TODO: Melhorar o fix
         List <Position> posList = new ArrayList<Position>();
         for (Position posArray : this.positions) {
-            posList.add(posArray);
+            posList.add(new Position(posArray.getRow()*posConstMulti, posArray.getCol()*posConstMulti));
         }
 
         Position temp;
@@ -178,7 +180,7 @@ public class Card {
                 temp = new Position(j - center, k - center);
                 boolean isMove = false;
 
-                for (Position pos : positions) {
+                for (Position pos : posList) {
                     if (pos.getRow() == temp.getRow() && pos.getCol() == temp.getCol()) {
                         isMove = true;
                         break;

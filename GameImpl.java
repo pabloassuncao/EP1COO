@@ -113,7 +113,7 @@ public class GameImpl implements Game{
         System.out.println();
 
         System.out.println("A carta da mesa é " + tableCard.getName() + " e possui as seguintes posições de movimento:");
-        this.tableCard.printCard();
+        this.tableCard.printCard(this.turn.getPieceColor());
         System.out.println();
 
         System.out.println("O tabuleiro é:");
@@ -268,7 +268,7 @@ public class GameImpl implements Game{
             throw new InvalidPieceException("A peça não está no tabuleiro.");
 
         // Verifica se é a vez do jogador
-        if(curPiece.getColor() != turn.getPieceColor())
+        if(curPiece.getColor() != this.turn.getPieceColor())
             throw new IncorrectTurnOrderException("Não é a sua vez.");
 
 
@@ -281,7 +281,7 @@ public class GameImpl implements Game{
         // Verifica se a carta usada está na mão do jogador
         boolean cardInHand = false;
 
-        for (Card c : turn.getCards()) {
+        for (Card c : this.turn.getCards()) {
             if (c.getName().equals(card.getName())) {
                 cardInHand = true;
                 break;
@@ -342,7 +342,7 @@ public class GameImpl implements Game{
         this.printBoard();
 
         System.out.println("A carta na mesa é:");
-        this.tableCard.printCard();
+        this.tableCard.printCard(this.turn.getPieceColor());
 
         System.out.println("A mão do jogador " + this.redPlayer.getName() + " é:");
         this.redPlayer.printHand();
