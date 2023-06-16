@@ -1,8 +1,5 @@
 import java.util.*;
 
-//TODO: corrigir o checkVictory
-//TODO: Investigar pq só inicia pelo blue
-
 /**
  * Classe que contém métodos que serão chamados para a execução do jogo
  */
@@ -93,7 +90,7 @@ public class GameImpl implements Game{
 
             System.out.println("Ele venceu o jogo? " + checkVictory(actual.getPieceColor()));
             if(checkVictory(actual.getPieceColor())){
-                System.out.println("O vencedor é o jogador " + this.winner.getName());
+                System.out.println("O vencedor é o jogador " + actual.getName() + " de cor " + actual.getPieceColor() + "!");
                 break;
             }
         }
@@ -136,7 +133,9 @@ public class GameImpl implements Game{
 
         Card card = this.turn.getCards()[cardIndex];
 
-        Position cardMove = card.getPositions()[cardMoveIndex];
+        Position cardMove = card.getMove(cardMoveIndex, this.turn.getPieceColor());
+
+        System.out.println("Você escolheu mover a peça " + "["+ cardMove.getRow() + "," + cardMove.getCol() +"]" + "\n");
 
         Position currentPos = new Position(pieceRow, pieceCol);
 
@@ -161,8 +160,6 @@ public class GameImpl implements Game{
         this.turn.swapCard(card, this.tableCard);
 
         this.tableCard = card;
-
-        System.out.println(checkVictory(this.turn.getPieceColor()));
 
         this.turn = opponent;
         
@@ -221,12 +218,11 @@ public class GameImpl implements Game{
      * @return Um booleano true para caso esteja em condições de vencer e false caso contrário
      */
     public boolean checkVictory(Color color){
-        Spot templeToCheck = color == Color.RED ? board[0][2] : board[4][2];
+        Spot templeToCheck = color == Color.BLUE ? board[0][2] : board[4][2];
 
-        Piece masterToCheck = color == Color.RED ? blueMasterPiece : redMasterPiece;
+        Piece masterToCheck = color == Color.BLUE ? blueMasterPiece : redMasterPiece;
 
         if(masterToCheck.isDead()){
-            System.out.println("O mestre do jogador " + color + " está morto!");
             return true;
         }
 
@@ -272,7 +268,7 @@ public class GameImpl implements Game{
             throw new IncorrectTurnOrderException("Não é a sua vez.");
 
 
-        if(!card.hasMove(cardMove))
+        if(!card.hasMove(cardMove, this.turn.getPieceColor()))
             throw new IllegalMovementException("Movimento não permitido pela carta.");
 
         if(endRow < 0 || endRow  >= BOARD_SIZE || endCol < 0 || endCol >= BOARD_SIZE)

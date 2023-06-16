@@ -69,6 +69,34 @@ public class Spot {
     }
 
     /**
+     * Método que cria um Tabuleiro com os espaços e peças iniciais
+     * @param size Tamanho do tabuleiro
+     */
+    public static Spot[][] createTesteBoard(int size){
+        Spot[][] board = new Spot[size][size];
+
+        int center = size/2;
+        
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++) {
+                if(i == 0){
+                    if(j == center) 
+                        board[i][j] = new Spot(new Piece(Color.BLUE, true), new Position(i, j), Color.BLUE);
+                    else 
+                       board[i][j] = new Spot(new Piece(Color.BLUE, false), new Position(i, j));
+                } else if(i == size-1){
+                    if(j == center) 
+                        board[i][j] = new Spot(new Piece(Color.RED, true), new Position(i, j), Color.RED);
+                    else 
+                        board[i][j] = new Spot(new Piece(Color.RED, false), new Position(i, j));                
+                } else 
+                    board[i][j] = new Spot(new Piece(Color.RED, true), new Position(i, j), Color.RED);
+            }
+        }
+        return board;
+    }
+
+    /**
      * Método que devolve a posição (coordenadas) do espaço
      * @return Objeto Position contendo a posição (coordenadas) do espaço
      */

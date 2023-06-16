@@ -78,8 +78,16 @@ public class Card {
      * @return String que contém o nome da carta
      */
     public Position getMove(int baseIndex, Color color) {
-        int index = color == Color.BLUE ? this.positions.length - baseIndex : baseIndex;
-        return new Position(this.positions[index].getRow()+BOARD_SIZE/2, this.positions[index].getCol()+BOARD_SIZE/2);
+        int index = baseIndex;
+        int multi = 1;
+
+        // para selecionar a jogada correta para cada cor
+        if (color == Color.BLUE) {
+            index = this.positions.length - 1 - baseIndex;
+            multi = -1;
+        }
+
+        return new Position(this.positions[index].getRow() * multi, this.positions[index].getCol() * multi);
     }
 
     /**
@@ -112,9 +120,12 @@ public class Card {
      * @param cardMove Posição realtiva de movimento para validação
      * @return
      */
-    public boolean hasMove(Position cardMove) {
+    public boolean hasMove(Position cardMove, Color color) {
+        // para inverter a visão da carta para o jogador azul
+        int multi = color == Color.BLUE ? -1 : 1;
+
         for (Position p : this.positions) {
-            if (p.getRow() == cardMove.getRow() && p.getCol() == cardMove.getCol())
+            if (p.getRow()*multi == cardMove.getRow() && p.getCol()*multi == cardMove.getCol())
                 return true;
         }
         return false;
@@ -147,6 +158,7 @@ public class Card {
      * Método para printar uma carta e seus possíveis movimentos
      */
     public void printCard(Color color) {
+        // para inverter a visão da carta para o jogador azul
         int posConstMulti = color == Color.BLUE ? -1 : 1;
         // TODO: Melhorar o fix
         List <Position> posList = new ArrayList<Position>();
