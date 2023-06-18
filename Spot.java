@@ -171,6 +171,5 @@ public class Spot {
      */
     protected void releaseSpot() {
         this.piece = null;
-        this.color = Color.NONE;
     }
 }

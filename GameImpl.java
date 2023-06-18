@@ -22,8 +22,10 @@ public class GameImpl implements Game{
         this.board = Spot.createBoard(this.BOARD_SIZE);
         this.deck = Card.createCards();
 
-        redMasterPiece = board[0][2].getPiece();
-        blueMasterPiece = board[4][2].getPiece();
+        System.out.println("Temples are " + board[0][2].getColor() + " and " + board[4][2].getColor());
+        
+        redMasterPiece = board[4][2].getPiece();
+        blueMasterPiece = board[0][2].getPiece();
 
         this.redPlayer = new Player("Red", Color.RED, this.deck[0], this.deck[1]);
         this.bluePlayer = new Player("Blue", Color.BLUE, this.deck[2], this.deck[3]);
@@ -36,8 +38,10 @@ public class GameImpl implements Game{
         this.board = Spot.createBoard(this.BOARD_SIZE);
         this.deck = Card.createCards();
 
-        redMasterPiece = board[0][2].getPiece();
-        blueMasterPiece = board[4][2].getPiece();
+        System.out.println("Temples are " + board[0][2].getColor() + " and " + board[4][2].getColor());
+
+        redMasterPiece = board[4][2].getPiece();
+        blueMasterPiece = board[0][2].getPiece();
 
         this.redPlayer = new Player(redName, Color.RED, this.deck[0], this.deck[1]);
         this.bluePlayer = new Player(blueName, Color.BLUE, this.deck[2], this.deck[3]);
@@ -49,8 +53,10 @@ public class GameImpl implements Game{
     public GameImpl(String redName, String blueName, Card[] cards){
         this.board = Spot.createBoard(this.BOARD_SIZE);
 
-        redMasterPiece = board[0][2].getPiece();
-        blueMasterPiece = board[4][2].getPiece();
+        System.out.println("Temples are " + board[0][2].getColor() + " and " + board[4][2].getColor());
+
+        redMasterPiece = board[4][2].getPiece();
+        blueMasterPiece = board[0][2].getPiece();
 
         ArrayList<Card> cardsList = new ArrayList<Card>(Arrays.asList(cards));
 
@@ -84,15 +90,19 @@ public class GameImpl implements Game{
      */
     public void play(){
         while(true){
-            Player actual = this.turn;
+            Player actual = this.turn == this.redPlayer ? this.redPlayer : this.bluePlayer;
+
             this.playTurn();
             System.out.println(actual.getName() + " jogou!");
 
-            System.out.println("Ele venceu o jogo? " + checkVictory(actual.getPieceColor()));
+            System.out.println("Será que temos um vencedor?");
             if(checkVictory(actual.getPieceColor())){
                 System.out.println("O vencedor é o jogador " + actual.getName() + " de cor " + actual.getPieceColor() + "!");
                 break;
+            } else {
+                System.out.println("Não temos um vencedor ainda!");
             }
+            System.out.println("\n\n=================================================================================================================================================\n\n");
         }
     }
 
@@ -157,14 +167,12 @@ public class GameImpl implements Game{
             return;
         }
 
-        this.turn.swapCard(card, this.tableCard);
+        // this.turn.swapCard(card, this.tableCard);
 
-        this.tableCard = card;
+        // this.tableCard = card;
 
         this.turn = opponent;
         
-        System.out.println("\n\n=================================================================================================================================================\n\n");
-
         return;
     }
 
@@ -218,9 +226,21 @@ public class GameImpl implements Game{
      * @return Um booleano true para caso esteja em condições de vencer e false caso contrário
      */
     public boolean checkVictory(Color color){
-        Spot templeToCheck = color == Color.BLUE ? board[0][2] : board[4][2];
+        Spot templeToCheck = color.equals(Color.RED) ? board[0][2] : board[4][2];
 
-        Piece masterToCheck = color == Color.BLUE ? blueMasterPiece : redMasterPiece;
+        System.out.println("A cor a ser checada é " + color + "\n");
+        System.out.println("O templo a ser checado é " + templeToCheck.getColor() + "\n");
+
+        System.out.println("A peça do templo a ser checada é " + templeToCheck.getPiece() + "\n");
+
+        if(templeToCheck.getPiece() != null ) 
+            System.out.println("A cor da peça do templo a ser checada é " + templeToCheck.getPiece().getColor() + "\n");
+
+        Piece masterToCheck = color.equals(Color.RED) ? blueMasterPiece : redMasterPiece;
+
+        System.out.println("A peça a ser checada é " + masterToCheck.getColor() + "\n");
+
+        System.out.println("A peça a ser checada está morta? " + masterToCheck.isDead() + "\n");
 
         if(masterToCheck.isDead()){
             return true;
@@ -263,10 +283,12 @@ public class GameImpl implements Game{
         if(curPiece == null)
             throw new InvalidPieceException("A peça não está no tabuleiro.");
 
-        // Verifica se é a vez do jogador
+        // Verifica se a peça é do jogador que está fazendo o movimento
         if(curPiece.getColor() != this.turn.getPieceColor())
-            throw new IncorrectTurnOrderException("Não é a sua vez.");
+            throw new InvalidPieceException("Essa peça não é sua.");
 
+        // Não há como validar se é o turno é do jogador visto que a gente utiliza a variável 
+        // turno diretamente assim não há como burlar
 
         if(!card.hasMove(cardMove, this.turn.getPieceColor()))
             throw new IllegalMovementException("Movimento não permitido pela carta.");
@@ -297,6 +319,13 @@ public class GameImpl implements Game{
         endSpot.movePiece(curSpot.getPiece());
         
         curSpot.removePiece();
+
+        //Posicionado aqui que, por mais que eu não ache que deva ser aqui,
+        //é o único lugar que faz sentido, já que é o único lugar que temos
+        //visto que não vamos implementar a lógica de turnos
+        this.turn.swapCard(card, this.tableCard);
+
+        this.tableCard = card;
 
         return;
     };
