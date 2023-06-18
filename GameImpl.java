@@ -4,16 +4,20 @@ import java.util.*;
  * Classe que contém métodos que serão chamados para a execução do jogo
  */
 public class GameImpl implements Game{
-    protected final int BOARD_SIZE = 5;
-    protected Player winner = null;
+    private final int BOARD_SIZE = 5;
+    private Player winner = null;
     private Player turn;
     private Spot[][] board;
-    private Player redPlayer;
-    private Player bluePlayer;
-    private Piece redMasterPiece;
-    private Piece blueMasterPiece;
+    // Como está setado como final são definidos no construtor
+    // a permissão como public facilita a utilização não exigindo
+    // escrita de métodos get manualmente
+    // modificado para testar mais facilmente
+    public final Player redPlayer;
+    public final Player bluePlayer;
+    public final Piece redMasterPiece;
+    public final Piece blueMasterPiece;
+    public final Card[] deck;
     private Card tableCard;
-    private Card[] deck;
 
     /**
      * Construtor que inicia o jogo com as informações básicas
@@ -51,18 +55,22 @@ public class GameImpl implements Game{
     }
 
     public GameImpl(String redName, String blueName, Card[] cards){
-        this.board = Spot.createBoard(this.BOARD_SIZE);
-
-        System.out.println("Temples are " + board[0][2].getColor() + " and " + board[4][2].getColor());
-
-        redMasterPiece = board[4][2].getPiece();
-        blueMasterPiece = board[0][2].getPiece();
+        if(cards.length < 5){
+            throw new IllegalArgumentException("Cards must have at least 5 elements");
+        }
 
         ArrayList<Card> cardsList = new ArrayList<Card>(Arrays.asList(cards));
 
         if (cardsList.contains(null)) {
             throw new IllegalArgumentException("Cards cannot be null");
         }
+
+        this.board = Spot.createBoard(this.BOARD_SIZE);
+
+        System.out.println("Temples are " + board[0][2].getColor() + " and " + board[4][2].getColor());
+
+        redMasterPiece = board[4][2].getPiece();
+        blueMasterPiece = board[0][2].getPiece();
 
         Collections.shuffle(cardsList);
 
@@ -84,6 +92,14 @@ public class GameImpl implements Game{
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
+
+    /**
+     * Método que troca o turno
+     * @return void
+     */
+    public void swapTurn(){
+        this.turn = this.turn.equals(this.redPlayer) ? this.bluePlayer : this.redPlayer;
+    }
 
     /**
      * Método para jogar o jogo
@@ -167,11 +183,12 @@ public class GameImpl implements Game{
             return;
         }
 
+        // Realocado pro MakeMove por questões avaliativas do trabalho ;)
         // this.turn.swapCard(card, this.tableCard);
 
         // this.tableCard = card;
 
-        this.turn = opponent;
+        // this.swapTurn();
         
         return;
     }
@@ -182,6 +199,9 @@ public class GameImpl implements Game{
      * @return O enum Color que representa a cor da posição
      */
     public Color getSpotColor(Position position){
+        if (position.getRow() < 0 || position.getRow() > 4 || position.getCol() < 0 || position.getCol() > 4){
+            throw new IllegalArgumentException("Position out of bounds");
+        }
         return this.board[position.getRow()][position.getCol()].getColor();
     };
 
@@ -191,6 +211,9 @@ public class GameImpl implements Game{
      * @return Um objeto Piece que representa a peça na posição indicada. Se não tiver peça, devolve null
      */
     public Piece getPiece(Position position){
+        if (position.getRow() < 0 || position.getRow() > 4 || position.getCol() < 0 || position.getCol() > 4){
+            throw new IllegalArgumentException("Position out of bounds");
+        }
         return this.board[position.getRow()][position.getCol()].getPiece();
     }
 
@@ -253,7 +276,6 @@ public class GameImpl implements Game{
 
         return false;
     };
-
 
     /**
      * Método que move uma peça
@@ -326,6 +348,8 @@ public class GameImpl implements Game{
         this.turn.swapCard(card, this.tableCard);
 
         this.tableCard = card;
+
+        this.swapTurn();
 
         return;
     };

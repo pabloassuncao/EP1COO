@@ -13,6 +13,9 @@ public class Player {
      * @param cards Cartas na mão do jogador
      */
     public Player(String name, Color pieceColor, Card[] cards) {
+        if (cards.length != 2) 
+            throw new IllegalArgumentException("O jogador deve ter exclusivamente duas cartas na mão");
+
         this.name = name;
         this.pieceColor = pieceColor;
         this.cards = cards;

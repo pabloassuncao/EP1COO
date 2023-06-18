@@ -20,16 +20,15 @@ public class Card {
     public Card(String name, Color color, Position[] positions) {
         this.name = name;
         this.color = color;
-        this.positions = positions;
-        this.sortMoves();
+        this.positions = Card.sortMoves(positions);
     }
 
-    private void sortMoves() {
+    public static Position[] sortMoves(Position[] movesArr) {
         List<Position> moves = new ArrayList<Position>();
 
         List<Position> posList = new ArrayList<Position>();
 
-        for (Position pos : this.positions) {
+        for (Position pos : movesArr) {
             posList.add(pos);
         }
 
@@ -37,22 +36,12 @@ public class Card {
         Position temp;
         int center = BOARD_SIZE / 2;
 
-        // for(int j = 0; j < BOARD_SIZE; j++) {
-        //     for(int k = 0; k < BOARD_SIZE; k++) {
-        //         temp = new Position(j-BOARD_SIZE/2, k-BOARD_SIZE/2);
-        //         if (posList.contains(temp)) {
-        //             moves.add(temp);
-        //             moveCount++;
-        //         }
-        //     }
-        // }
-
         for (int j = 0; j < BOARD_SIZE; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {
                 temp = new Position(j - center, k - center);
                 boolean isMove = false;
 
-                for (Position pos : positions) {
+                for (Position pos : movesArr) {
                     if (pos.getRow() == temp.getRow() && pos.getCol() == temp.getCol()) {
                         isMove = true;
                         break;
@@ -66,10 +55,10 @@ public class Card {
             }
         }
 
-        if (moveCount != positions.length)
+        if (moveCount != movesArr.length)
             throw new RuntimeException("Erro ao criar cartas: número de movimentos inválido");
 
-        this.positions = moves.toArray(new Position[moves.size()]);
+        return moves.toArray(new Position[moves.size()]);
     }
 
     /**
