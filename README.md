@@ -29,11 +29,21 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 ## 🚀 Instalando Onitama
 
-Para instalar o Onitama 
+Para instalar o Onitama, execute na pasta raiz
 
-Linux Windows e macOS:
+Linux e macOS:
 ```
-javac *.java
+find . -name "*.java" ! -name "*Test*" -exec javac {} +
+```
+Windows (Powershell):
+```
+Get-ChildItem -Recurse -Filter *.java | Where-Object { $_.Name -notlike "*Test*" } | ForEach-Object { javac $_.FullName }
+```
+Windows (Prompt):
+```
+for /r %G in (*.java) do (
+    echo %~nG | find /i "Test" >nul || javac "%G"
+)
 ```
 
 ## ☕ Jogando Onitama
@@ -41,9 +51,20 @@ javac *.java
 Para jogar, basta rodar os seguintes passos:
 
 - Determine quem vai ser o Player Vermelho e quem vai ser o Player Azul
-- Execute o comando
+- Execute o seguinte comando na pasta raiz
 	-	```java Main```
 -	Jogue seguindo o que for pedido no terminal
+
+### Obs: Você pode estudar o código e criar novas cartas e mecânicas pro jogo.
+
+## ☕ Testando Onitama
+
+Para rodar os testes execute:
+
+Linux e macOS:
+```
+javac -cp .:./lib/junit-4.13.2.jar:./lib/hamcrest-core-1.3.jar *Test.java && java -cp .:./lib/junit-4.13.2.jar:./lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore SpotTest PositionTest GameImplTest PlayerTest CardTest PieceTest;
+```
 
 ### Obs: Você pode estudar o código e criar novas cartas e mecânicas pro jogo.
 [⬆ Voltar ao topo](#nome-do-projeto)
