@@ -67,6 +67,9 @@ public class Card {
      * @return String que contém o nome da carta
      */
     public Position getMove(int baseIndex, Color color) {
+        if(baseIndex < 0 || baseIndex >= this.positions.length)
+            throw new RuntimeException("Erro ao obter movimento: index inválido");
+
         int index = baseIndex;
         int multi = 1;
 

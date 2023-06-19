@@ -98,17 +98,23 @@ public class GameImpl implements Game{
         while(true){
             Player actual = this.turn == this.redPlayer ? this.redPlayer : this.bluePlayer;
 
-            this.playTurn();
-            System.out.println(actual.getName() + " jogou!");
+            try{
+                this.playTurn();
+                System.out.println(actual.getName() + " jogou!");
 
-            System.out.println("Será que temos um vencedor?");
-            if(checkVictory(actual.getPieceColor())){
-                System.out.println("O vencedor é o jogador " + actual.getName() + " de cor " + actual.getPieceColor() + "!");
-                break;
-            } else {
-                System.out.println("Não temos um vencedor ainda!");
+                System.out.println("Será que temos um vencedor?");
+                if(checkVictory(actual.getPieceColor())){
+                    System.out.println("O vencedor é o jogador " + actual.getName() + " de cor " + actual.getPieceColor() + "!");
+                    break;
+                } else {
+                    System.out.println("Não temos um vencedor ainda!");
+                }
+                System.out.println("\n\n=================================================================================================================================================\n\n");
+            } catch (Exception e){
+                System.out.println("Ocorreu um erro: " + e.getMessage());
+                System.out.println("Jogador " + actual.getName() + " joga de novo!");
+                continue;
             }
-            System.out.println("\n\n=================================================================================================================================================\n\n");
         }
     }
 
@@ -146,6 +152,9 @@ public class GameImpl implements Game{
 
         System.out.println("Escolha uma dos movimentos da carta digitando seu número:");
         int cardMoveIndex = scanner.nextInt() - 1;
+
+        if(cardIndex < 0 || cardIndex >= this.turn.getCards().length)
+            throw new RuntimeException("Erro ao obter a carto pois o index é inválido");
 
         Card card = this.turn.getCards()[cardIndex];
 
