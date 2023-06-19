@@ -149,7 +149,6 @@ public class Card {
     public void printCard(Color color) {
         // para inverter a visão da carta para o jogador azul
         int posConstMulti = color == Color.BLUE ? -1 : 1;
-        // TODO: Melhorar o fix
         List <Position> posList = new ArrayList<Position>();
         for (Position posArray : this.positions) {
             posList.add(new Position(posArray.getRow()*posConstMulti, posArray.getCol()*posConstMulti));
@@ -159,22 +158,6 @@ public class Card {
 
         int moveIndex = 1;
         int center = BOARD_SIZE/2;
-
-        // for(int j = 0; j < BOARD_SIZE; j++) {
-        //     for(int k = 0; k < BOARD_SIZE; k++) {
-        //         temp = new Position(j-center, k-center);
-        //         if (posList.contains(temp)) {
-        //             System.out.print("[0"+ moveIndex +"]");
-        //             moveIndex++;
-        //         } else if(k == center && j == center) {
-        //             System.out.print("[XX]");
-        //         } else {
-        //             System.out.print("[  ]");
-        //         }
-        //     }
-        //     System.out.println();
-        // }
-        // System.out.println();
 
         for (int j = 0; j < BOARD_SIZE; j++) {
             for (int k = 0; k < BOARD_SIZE; k++) {

@@ -5,7 +5,6 @@ import java.util.*;
  */
 public class GameImpl implements Game{
     private final int BOARD_SIZE = 5;
-    private Player winner = null;
     private Player turn;
     private Spot[][] board;
     // Como está setado como final são definidos no construtor
@@ -83,15 +82,6 @@ public class GameImpl implements Game{
 
         this.turn = this.tableCard.getColor() == Color.RED ? this.redPlayer : this.bluePlayer;
     }
-
-    /**
-     * Limpa a tela do terminal entre os turnos
-     * https://stackoverflow.com/questions/2979383/java-clear-the-console
-     */
-    private static void clearScreen() {
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
-	}
 
     /**
      * Método que troca o turno
@@ -182,13 +172,6 @@ public class GameImpl implements Game{
             System.out.println(e.getMessage());
             return;
         }
-
-        // Realocado pro MakeMove por questões avaliativas do trabalho ;)
-        // this.turn.swapCard(card, this.tableCard);
-
-        // this.tableCard = card;
-
-        // this.swapTurn();
         
         return;
     }
@@ -342,9 +325,6 @@ public class GameImpl implements Game{
         
         curSpot.removePiece();
 
-        //Posicionado aqui que, por mais que eu não ache que deva ser aqui,
-        //é o único lugar que faz sentido, já que é o único lugar que temos
-        //visto que não vamos implementar a lógica de turnos
         this.turn.swapCard(card, this.tableCard);
 
         this.tableCard = card;

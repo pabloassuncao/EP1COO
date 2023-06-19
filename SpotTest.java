@@ -85,7 +85,6 @@ public class SpotTest {
 
         Position positionMB = new Position(0, 2);
         Position positionRNM = new Position(4, 3);
-        Position center = new Position(2, 2);
 
         Spot spotBP = new Spot(positionMB);
         Spot spotRP = new Spot(positionRNM);
