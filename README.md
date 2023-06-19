@@ -46,6 +46,11 @@ for /r %G in (*.java) do (
 )
 ```
 
+Em último caso (Todos os sistemas):
+```
+javac Spot.java Position.java GameImpl.java Player.java Card.java Piece.java Game.java Main.java IllegalMovementException.java IncorrectTurnOrderException.java InvalidCardException.java InvalidPieceException.java OnitamaGameException.java
+```
+
 ## ☕ Jogando Onitama
 
 Para jogar, basta rodar os seguintes passos:
