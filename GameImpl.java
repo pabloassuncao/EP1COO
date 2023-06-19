@@ -274,6 +274,10 @@ public class GameImpl implements Game{
         int curRow = currentPos.getRow();
         int curCol = currentPos.getCol();
 
+        if(curRow < 0 || curRow  >= BOARD_SIZE || curCol < 0 || curCol >= BOARD_SIZE)
+            throw new IllegalMovementException("Movimento ilegal, posição inicial fora do tabuleiro");
+
+
         Spot curSpot = board[curRow][curCol];
 
         int cardRow = cardMove.getRow();
@@ -281,6 +285,10 @@ public class GameImpl implements Game{
 
         int endRow = curRow + cardRow;
         int endCol = curCol + cardCol;
+
+        if(endRow < 0 || endRow  >= BOARD_SIZE || endCol < 0 || endCol >= BOARD_SIZE)
+            throw new IllegalMovementException("Movimento ilegal, posição final fora do tabuleiro");
+
 
         Piece curPiece = curSpot.getPiece();
 
@@ -297,9 +305,6 @@ public class GameImpl implements Game{
 
         if(!card.hasMove(cardMove, this.turn.getPieceColor()))
             throw new IllegalMovementException("Movimento não permitido pela carta.");
-
-        if(endRow < 0 || endRow  >= BOARD_SIZE || endCol < 0 || endCol >= BOARD_SIZE)
-            throw new IllegalMovementException("Movimento ilegal, posição final fora do tabuleiro");
 
         // Verifica se a carta usada está na mão do jogador
         boolean cardInHand = false;
