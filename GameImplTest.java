@@ -95,5 +95,12 @@ public class GameImplTest {
 
         Assert.assertEquals(false, gameWNamesWCards.blueMasterPiece.isDead());       
         Assert.assertEquals(false, gameWNamesWCards.redMasterPiece.isDead());
+        
+        
+        Card[] missingCardsDeck = allDeckList.subList(0, 4).toArray(new Card[4]);
+
+        Assert.assertThrows(RuntimeException.class, () -> {
+            new GameImpl("RedPlayer", "BluePlayer", missingCardsDeck);
+        });
     }
 }
