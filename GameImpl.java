@@ -154,7 +154,7 @@ public class GameImpl implements Game{
         int cardMoveIndex = scanner.nextInt() - 1;
 
         if(cardIndex < 0 || cardIndex >= this.turn.getCards().length)
-            throw new RuntimeException("Erro ao obter a carto pois o index é inválido");
+            throw new RuntimeException("Erro ao obter a carta pois o index é inválido");
 
         Card card = this.turn.getCards()[cardIndex];
 
